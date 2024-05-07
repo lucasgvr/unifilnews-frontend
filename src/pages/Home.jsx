@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
+
 import axios from 'axios'
 
-import '../styles/home.scss'
+import { HiPencilAlt } from "react-icons/hi";
+import { FaTrash } from "react-icons/fa";
 
-import { useEffect, useState } from 'react'
+import '../styles/home.scss'
 
 export function Home() {
     const [users, setUsers] = useState([])
@@ -12,6 +15,14 @@ export function Home() {
             .then(response => setUsers(response.data))
             .catch(error => console.log(error))
     }, [])
+
+    function handleUpdate() {
+        // update function
+    }
+
+    function handleDelete() {
+        // delete function
+    }
 
     return (
         <div className='homeContainer'>
@@ -24,6 +35,7 @@ export function Home() {
                         <th>Password</th>
                         <th>CPF</th>
                         <th>Phone</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,13 +48,19 @@ export function Home() {
                                 <td>{data.password}</td>
                                 <td>{data.cpf}</td>
                                 <td>{data.phone}</td>
+                                <td className='buttons'>
+                                    <button onClick={handleUpdate}>
+                                        <HiPencilAlt />
+                                    </button>
+                                    <button onClick={handleDelete}>
+                                        <FaTrash />
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
-            
-
         </div>
     )
 }

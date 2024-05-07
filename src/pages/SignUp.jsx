@@ -1,9 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'
-import '../styles/signup.scss'
 import { useState } from 'react';
 
+import { Link, useNavigate } from 'react-router-dom';
+
+import axios from 'axios'
+
+import toast, { Toaster } from 'react-hot-toast'
+
 import { FaUserLock } from "react-icons/fa";
+
+import '../styles/signup.scss'
 
 export function SignUp() {
     const [firstName, setFirstName] = useState('')
@@ -18,6 +23,8 @@ export function SignUp() {
     function handleSubmit(event) {
         event.preventDefault()
 
+        const toastId = toast.loading('Loading')
+
         axios.post('http://localhost:8000/signup', {
             firstName,
             lastName,
@@ -27,9 +34,18 @@ export function SignUp() {
             phone
         }).then(response => {
             console.log(response)
-            navigate('/')
+            toast.success('User created', {
+                id: toastId
+            })
+
+            setTimeout(() => {
+                navigate('/')
+            }, 2000)
         }).catch(error => {
             console.log(error)
+            toast.error(`Error: ${error}`, {
+                id: toastId
+            })
         })
     }
 
@@ -51,6 +67,7 @@ export function SignUp() {
             </div>
             <button>Sign Up</button>
             <Link to='/signin' className='signInLink'>Already have an account? <span>Sign In</span></Link>
+            <Toaster />
         </form>
     )
 }

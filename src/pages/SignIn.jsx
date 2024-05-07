@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import '../styles/signin.scss'
 
 import { FaUserLock } from "react-icons/fa";
+
+import '../styles/signin.scss'
 
 export function SignIn() {
     return (

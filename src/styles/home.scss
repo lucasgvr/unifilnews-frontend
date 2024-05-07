@@ -10,7 +10,7 @@
     .homeTable {
         border-collapse: collapse;
         margin: 25px 0;
-
+        
         thead tr {
             background-color: #1976d2;
             color: #fafafa;
@@ -24,6 +24,8 @@
         tbody tr {
             border-bottom: 1px solid #dddddd;
 
+            text-align: center;
+
             &:nth-of-type(even) {
                 background-color: #bbdefb;
             }
@@ -31,8 +33,27 @@
             &:last-of-type {
                 border-bottom: 2px solid #1976d2;
             }
+        }
 
-            
+        .buttons {
+            display: flex;
+
+            gap: 0.5rem;
+
+            align-items: center;
+            justify-content: center;
+
+            button {
+                border: 0;
+                background-color: #1976d2;
+                color: #fff;
+                padding: 0.25rem;
+
+                width: 2rem;
+                height: 2rem;
+
+                border-radius: 0.5rem;
+            }
         }
     }    
 }
