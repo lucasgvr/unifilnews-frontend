@@ -1,24 +1,53 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'
 import '../styles/signup.scss'
+import { useState } from 'react';
 
 import { FaUserLock } from "react-icons/fa";
 
 export function SignUp() {
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [cpf, setCpf] = useState('')
+    const [phone, setPhone] = useState('')
+
+    const navigate = useNavigate()
+
+    function handleSubmit(event) {
+        event.preventDefault()
+
+        axios.post('http://localhost:8000/signup', {
+            firstName,
+            lastName,
+            email,
+            password,
+            cpf,
+            phone
+        }).then(response => {
+            console.log(response)
+            navigate('/')
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     return (
-        <form className="signUpContainer">
+        <form className="signUpContainer" onSubmit={handleSubmit}>
             <div className='iconContainer'>
                 <FaUserLock color='#fff'/>
             </div>
             <p className='signUpTitle'>Sign Up</p>
             <div className='formContainer'>
                 <div className='inputLine'>
-                    <input type="text" placeholder="First Name" />
-                    <input type="text" placeholder="Last Name" />
+                    <input type="text" placeholder="First Name" onChange={event => setFirstName(event.target.value)} />
+                    <input type="text" placeholder="Last Name" onChange={event => setLastName(event.target.value)} />
                 </div>
-                <input type="text" placeholder="Email Address"/>
-                <input type="text" placeholder="Password" />
-                <input type="text" placeholder="CPF" />
-                <input type="text" placeholder="Telefone" />
+                <input type="text" placeholder="Email Address" onChange={event => setEmail(event.target.value)} />
+                <input type="text" placeholder="Password"  onChange={event => setPassword(event.target.value)} />
+                <input type="text" placeholder="CPF" onChange={event => setCpf(event.target.value)} />
+                <input type="text" placeholder="Telefone" onChange={event => setPhone(event.target.value)} />
             </div>
             <button>Sign Up</button>
             <Link to='/signin' className='signInLink'>Already have an account? <span>Sign In</span></Link>
