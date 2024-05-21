@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 import axios from 'axios'
 
@@ -6,6 +7,7 @@ import { HiPencilAlt } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 
 import '../styles/home.scss'
+import { useAuth } from '../hooks/useAuth';
 
 export function Home() {
     const [users, setUsers] = useState([])
@@ -16,6 +18,8 @@ export function Home() {
             .catch(error => console.log(error))
     }, [])
 
+    const { signOut } = useAuth()
+
     function handleUpdate() {
         // update function
     }
@@ -24,8 +28,15 @@ export function Home() {
         // delete function
     }
 
+    function handleSignOut() {
+        signOut()
+    }
+
     return (
         <div className='homeContainer'>
+            <Link to='/signin'>Sign In</Link>
+            <Link to='/signup'>Sign Up</Link>
+            <button onClick={handleSignOut}>Log out</button>
             <table className='homeTable'>
                 <thead>
                     <tr>

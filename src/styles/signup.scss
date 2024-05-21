@@ -27,13 +27,19 @@
         display: flex;
         flex-direction: column;
 
+        width: 34rem;
+
         gap: 1rem;
         margin-top: 2rem;
 
         .inputLine {
             display: flex;
 
-            gap: 1rem;
+            justify-content: space-between;
+
+            input {
+                width: 16.5rem;
+            }
         }
 
         input {

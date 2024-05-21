@@ -1,17 +1,18 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../hooks/useAuth';
 
 import { FaUserLock } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
-import axios from "axios";
 
 import '../styles/signin.scss'
-import { useState } from 'react';
 
 export function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [token, setToken] = useState('')
-    const [error, setError] = useState('')
+
+    const { signIn, error } = useAuth()
 
     const navigate = useNavigate()
 
@@ -19,19 +20,11 @@ export function SignIn() {
         event.preventDefault()
 
         try {
-            const response = await axios.post('http://localhost:8000/signin', { email, password })
+            await signIn(email, password)
 
-            const { token } = response.data
-
-            localStorage.setItem('token', token)
-
-            setToken(token)
-            setError('')
-
-            alert('Signed in')
             navigate('/')
         } catch (error) {
-            setError('Invalid Credentials')
+            console.error('Login failed: ', error)
         }
     }
 
