@@ -20,7 +20,7 @@ export function SignUp() {
 
     const navigate = useNavigate()
 
-    function handleSubmit(event) {
+    function handleSignUp(event) {
         event.preventDefault()
 
         const toastId = toast.loading('Loading')
@@ -50,7 +50,7 @@ export function SignUp() {
     }
 
     return (
-        <form className="signUpContainer" onSubmit={handleSubmit}>
+        <form className="signUpContainer" onSubmit={handleSignUp}>
             <div className='iconContainer'>
                 <FaUserLock color='#fff'/>
             </div>
