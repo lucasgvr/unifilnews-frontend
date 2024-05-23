@@ -5,9 +5,10 @@ export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
     const [token, setToken] = useState('')
     const [error, setError] = useState('')
+
+    const[loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     const signIn = async (email, password) =>  {
         try {
-            const response = await axios.post('http://localhost:8000/signin', { email, password })
+            const response = await axios.post('http://localhost:8000/login', { email, password })
 
             const { token, user } = response.data
 
@@ -42,10 +43,11 @@ export const AuthProvider = ({ children }) => {
             setError('')
 
             setUser(user)
+
             console.log(user)
             console.log('Signed in')
         } catch (error) {
-            setError('Invalid Credentials')
+            setError(error.response.data.error)
         }
     }
 
@@ -55,8 +57,25 @@ export const AuthProvider = ({ children }) => {
         setUser(null)
     }
 
+    const deleteUser = async (userId) => {
+        try {
+            await axios.post(`http://localhost:8000/user/${userId}`)
+
+            if(userId == localStorage.getItem('userId')) {
+                signOut()
+            }
+
+            console.log('User deleted')
+
+
+        } catch (error) {
+            setError('Failed to delete user')
+            console.error('Error deleting user:', error)
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, signIn, signOut, loading, token, error }}>
+        <AuthContext.Provider value={{ user, signIn, signOut, loading, token, error, deleteUser }}>
             { children }
         </AuthContext.Provider>
     )

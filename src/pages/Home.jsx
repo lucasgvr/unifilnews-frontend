@@ -16,16 +16,16 @@ export function Home() {
         axios.get('http://localhost:8000')
             .then(response => setUsers(response.data))
             .catch(error => console.log(error))
-    }, [])
+    }, [users])
 
-    const { signOut } = useAuth()
+    const { signOut, user, deleteUser } = useAuth()
 
     function handleUpdate() {
         // update function
     }
 
-    function handleDelete() {
-        // delete function
+    function handleDelete(id) {
+        deleteUser(id)
     }
 
     function handleSignOut() {
@@ -34,9 +34,18 @@ export function Home() {
 
     return (
         <div className='homeContainer'>
-            <Link to='/signin'>Sign In</Link>
+            <Link to='/login'>Sign In</Link>
             <Link to='/signup'>Sign Up</Link>
             <button onClick={handleSignOut}>Log out</button>
+
+            <div>
+                <p>{user.id} {user.firstName} {user.lastName}</p>
+                <p>{user.email}</p>
+                <p>{user.cpf}</p>
+                <p>{user.phone}</p>
+
+            </div>
+
             <table className='homeTable'>
                 <thead>
                     <tr>
@@ -63,7 +72,7 @@ export function Home() {
                                     <button onClick={handleUpdate}>
                                         <HiPencilAlt />
                                     </button>
-                                    <button onClick={handleDelete}>
+                                    <button onClick={() => handleDelete(data.id)}>
                                         <FaTrash />
                                     </button>
                                 </td>

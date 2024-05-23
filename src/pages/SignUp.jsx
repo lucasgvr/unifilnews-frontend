@@ -66,7 +66,7 @@ export function SignUp() {
                 <input type="text" placeholder="Telefone" onChange={event => setPhone(event.target.value)} />
             </div>
             <button>Sign Up</button>
-            <Link to='/signin' className='signInLink'>Already have an account? <span>Sign In</span></Link>
+            <Link to='/login' className='signInLink'>Already have an account? <span>Sign In</span></Link>
             <Toaster />
         </form>
     )
