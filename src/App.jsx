@@ -5,6 +5,8 @@ import { AuthProvider } from './context/AuthContext'
 import { Home } from './pages/Home'
 import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
+import { Posts } from './pages/Posts'
+import { UserPage } from './pages/UserPage'
 
 import PrivateRoute from './PrivateRoute'
 import AuthRoute from './AuthRoute'
@@ -15,9 +17,7 @@ function App() {
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<PrivateRoute />} >
-                        <Route path='/' element={<Home />} />
-                    </Route>
+                    <Route path='/' element={<Home />} />
 
                     <Route path='/login' element={<AuthRoute />} >
                         <Route path='/login' element={<SignIn />} />
@@ -27,6 +27,11 @@ function App() {
                         <Route path='/signup' element={<SignUp />} />
                     </Route>
 
+                    <Route path='/posts' element={<PrivateRoute />} >
+                        <Route path='/posts' element={<Posts />} />
+                    </Route>
+
+                    <Route path='/user/:id' element={<UserPage />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

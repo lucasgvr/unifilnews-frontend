@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         fetchUser()
-    }, [])
+    }, [user])
 
     const signIn = async (email, password) =>  {
         try {
@@ -66,8 +66,6 @@ export const AuthProvider = ({ children }) => {
             }
 
             console.log('User deleted')
-
-
         } catch (error) {
             setError('Failed to delete user')
             console.error('Error deleting user:', error)
