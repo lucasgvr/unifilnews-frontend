@@ -15,6 +15,7 @@ export function SignUp() {
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [cpf, setCpf] = useState('')
     const [phone, setPhone] = useState('')
 
@@ -61,7 +62,11 @@ export function SignUp() {
                     <input type="text" placeholder="Last Name" onChange={event => setLastName(event.target.value)} />
                 </div>
                 <input type="text" placeholder="Email Address" onChange={event => setEmail(event.target.value)} />
-                <input type="text" placeholder="Password"  onChange={event => setPassword(event.target.value)} />
+                <div className="inputLine">
+                    <input type="text" placeholder="Password"  onChange={event => setPassword(event.target.value)} />
+                    <input type="text" placeholder="Password"  onChange={event => setConfirmPassword(event.target.value)} />
+                </div>
+
                 <input type="text" placeholder="CPF" onChange={event => setCpf(event.target.value)} />
                 <input type="text" placeholder="Telefone" onChange={event => setPhone(event.target.value)} />
             </div>
