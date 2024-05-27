@@ -1,59 +1,45 @@
 .homeContainer {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: calc(100vh - 5rem);
+  
     display: flex;
-    flex-direction: column;
-
     align-items: center;
-    justify-content: center;
-
-    height: 100vh;
-
-    .homeTable {
-        border-collapse: collapse;
-        margin: 25px 0;
-        
-        thead tr {
-            background-color: #1976d2;
-            color: #fafafa;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            width: 8rem;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid #dddddd;
-
-            text-align: center;
-
-            &:nth-of-type(even) {
-                background-color: #bbdefb;
-            }
-
-            &:last-of-type {
-                border-bottom: 2px solid #1976d2;
-            }
-        }
-
-        .buttons {
-            display: flex;
-
-            gap: 0.5rem;
-
-            align-items: center;
-            justify-content: center;
-
-            button {
-                border: 0;
-                background-color: #1976d2;
-                color: #fff;
-                padding: 0.25rem;
-
-                width: 2rem;
-                height: 2rem;
-
-                border-radius: 0.5rem;
-            }
-        }
-    }    
-}
+    justify-content: space-between;
+  }
+  
+  .hero {
+    max-width: 600px;
+    
+    > span {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  
+    h1 {
+      font-size: 4.5rem;
+      line-height: 4.5rem;
+      font-weight: 900;
+      margin-top: 2.5rem;
+  
+      span {
+        color: var(--orange-5);
+      }
+    }
+  
+    p {
+      font-size: 1.5rem;
+      line-height: 2.5rem;
+      margin-top: 1.5rem;
+  
+      span {
+        color: var(--orange-5);
+        font-weight: bold;
+      }
+    }
+  
+    button {
+      margin-top: 2.5rem;
+    }
+  }

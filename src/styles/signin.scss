@@ -13,7 +13,7 @@
         width: 3rem;
         height: 3rem;
 
-        background-color: #1976d2;
+        background-color: var(--orange-5);
         border-radius: 50%;
         
         padding: 1rem;
@@ -44,7 +44,7 @@
 
             &:focus {
                 outline: none;
-                border: 0.1rem solid #1976d2;
+                border: 0.1rem solid var(--orange-5);
             }
         }
     }
@@ -60,7 +60,7 @@
         width: 34rem;
 
         color: #ffffff;
-        background-color: #1976d2;
+        background-color: var(--orange-5);
 
         &:hover {
             filter: brightness(0.9);
@@ -74,10 +74,14 @@
         cursor: default;
 
         span {
-            color: #1976d2;
+            color: var(--orange-5);
             text-decoration: underline;
 
             cursor: pointer;
+
+            &:hover {
+                filter: brightness(0.8);
+            }
         }
     }
 }

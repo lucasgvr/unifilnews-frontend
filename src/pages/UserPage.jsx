@@ -8,6 +8,10 @@ import { Loader } from "../components/Loader"
 import '../styles/user.scss'
 import { useAuth } from "../hooks/useAuth"
 
+import defaultImg from '../assets/default.png'
+
+import { FaTrash } from "react-icons/fa";
+
 export function UserPage() {
     const { id } = useParams()
 
@@ -49,21 +53,20 @@ export function UserPage() {
     const handleUpload = async (event) => {
         event.preventDefault()
 
-        const formData = new FormData();
+        const formData = new FormData()
 
         formData.append('firstName', firstName === '' ? user.firstName : firstName)
+        formData.append('lastName', lastName === '' ? user.lastName : lastName)
+        formData.append('email', email === '' ? user.email : email)
+        formData.append('cpf', cpf === '' ? user.cpf : cpf)
+        formData.append('phone', phone === '' ? user.phone : phone)
 
-        formData.append('lastName', lastName);
-        formData.append('email', email);
-        
-        formData.append('cpf', cpf);
-        formData.append('phone', phone);
-        formData.append('image', selectedFile);
+        formData.append('image', selectedFile == null ? user.image : selectedFile)
 
         formData.append('id', user.id)
 
         console.log(formData)
-        
+
         axios.post('http://localhost:8000/upload', formData)
         .then(response => {
             if(response.data.Status === 'Success') {
@@ -76,16 +79,31 @@ export function UserPage() {
         .catch(error => console.log(error))
     }
 
+    function handleDeleteImg() {
+        axios.post(`http://localhost:8000/user/${user.id}/delete/image`)
+        .then(response => {
+            if(response.data.Status === 'Success') {
+                console.log('Image deleted')
+            } else {
+                console.log('Error while deleting image')
+            }
+        })
+        .catch(error => console.log(error))
+    }
+
     return (
         <>
             {!userPage ? <Loader /> : 
             <>
                 <Header />
 
-                {`/user/${user.id}` === location.pathname ? 
+                {`/user/${user?.id}` === location.pathname ? 
                 <form className="userEditContainer" onSubmit={handleUpload}>
                     <div className='formContainer'>
-                        <img src={`http://localhost:8000/images/${user.image}`} alt="" />
+                        <div className="imageContainer">
+                            <img src={user.image ? `http://localhost:8000/images/${user.image}` : defaultImg} alt="" />
+                            <FaTrash onClick={handleDeleteImg}color="var(--orange-5)"/>
+                        </div>
                         <div className='inputLine'>
                             <input defaultValue={user.firstName} type="text" placeholder="First Name" onChange={event => setFirstName(event.target.value)} />
                             <input defaultValue={user.lastName} type="text" placeholder="Last Name" onChange={event => setLastName(event.target.value)} />

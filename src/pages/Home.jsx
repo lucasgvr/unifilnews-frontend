@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 
 import { HiPencilAlt } from "react-icons/hi";
-import { FaTrash } from "react-icons/fa";
-
+import homeImg from '../assets/avatar.svg'
 import '../styles/home.scss'
 import { useAuth } from '../hooks/useAuth';
 import { Header } from '../components/Header';
+import { SubscribeButton } from '../components/SubscribeButton';
 
 export function Home() {
     const [users, setUsers] = useState([])
@@ -32,43 +32,21 @@ export function Home() {
     return (
         <>
             <Header />
-            <div className='homeContainer'>
-                <table className='homeTable'>
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Password</th>
-                            <th>CPF</th>
-                            <th>Phone</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            users.map((data) => (
-                                <tr key={data.id}>
-                                    <td>{data.firstName}</td>
-                                    <td>{data.lastName}</td>
-                                    <td>{data.email}</td>
-                                    <td>{data.password}</td>
-                                    <td>{data.cpf}</td>
-                                    <td>{data.phone}</td>
-                                    <td className='buttons'>
-                                        <button onClick={handleUpdate}>
-                                            <HiPencilAlt />
-                                        </button>
-                                        <button onClick={() => handleDelete(data.id)}>
-                                            <FaTrash />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </div>
+            <main className='homeContainer'>
+                <section className='hero'>
+                <span>👋 Olá, seja bem-vindo</span>
+                <h1>Notícias sobre <br /> 
+                    o universo <span>Unifil</span>
+                </h1>
+                <p>
+                    Tenha acesso à todas as publicações<br />
+                    <span>entrevistas</span>, tutoriais, vídeos e dicas
+                </p>
+                <SubscribeButton />
+                </section>
+
+                <img src={homeImg} alt="Girl Coding" />
+            </main>
         </>
     )
 }

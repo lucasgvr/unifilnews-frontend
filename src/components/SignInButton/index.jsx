@@ -19,11 +19,13 @@ export function SignInButton() {
         <button 
             type="button"
             className='signInButton'
-            onClick={`/user/${user.id}` === location.pathname ? () => navigate('/') : () => navigate(`/user/${user.id}`)}
+            onClick={`/user/${user.id}` === location.pathname ? () => {navigate('/') 
+            navigate(0)
+        handleSignOut()} : () => navigate(`/user/${user.id}`)}
         >
             {`/user/${user.id}` === location.pathname 
                 ? 
-                    <p onClick={handleSignOut}>Sign Out</p>
+                    <p>Sign Out</p>
                 : 
                 <>
                     <img src={user.image ? `http://localhost:8000/images/${user.image}` : defaultImg} alt="" />
