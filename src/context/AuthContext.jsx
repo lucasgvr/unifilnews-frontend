@@ -19,6 +19,8 @@ export const AuthProvider = ({ children }) => {
                     const response = await axios.get(`http://localhost:8000/user?id=${userId}`)
 
                     setUser(response.data.user)
+                } else {
+                    setUser(null)
                 }
             } catch (error) {
                 console.error('Failed to fetch user: ', error)
@@ -40,14 +42,13 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('userId', user.id)
 
             setToken(token)
-            setError('')
-
             setUser(user)
 
             console.log(user)
             console.log('Signed in')
+            return response.data.Status
         } catch (error) {
-            setError(error.response.data.error)
+            return error.response.data.error
         }
     }
 

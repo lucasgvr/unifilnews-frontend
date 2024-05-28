@@ -9,6 +9,8 @@ import '../styles/home.scss'
 import { useAuth } from '../hooks/useAuth';
 import { Header } from '../components/Header';
 import { SubscribeButton } from '../components/SubscribeButton';
+import toast, { Toaster } from 'react-hot-toast'
+
 
 export function Home() {
     const [users, setUsers] = useState([])

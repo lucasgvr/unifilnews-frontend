@@ -38,7 +38,7 @@
 
             &:focus {
                 outline: none;
-                border: 0.1rem solid #1976d2;
+                border: 0.1rem solid var(--orange-5);
             }
         }
 
@@ -78,6 +78,8 @@
             border-radius: 0.5rem;
     
             border: 1px solid #dad7cd;
+
+            background-color: #ffffff;
     
             padding: 1rem;
     
@@ -87,11 +89,11 @@
     
             &:focus {
                 outline: none;
-                border: 0.1rem solid #1976d2;
+                border: 0.1rem solid var(--orange-5);
             }
     
             &:hover {
-                filter: brightness(0.8);
+                filter: brightness(0.95);
             }
         }
     }

@@ -1,6 +1,7 @@
 import './styles.scss'
 import { ActiveLink } from '../ActiveLink';
 import { SignInButton } from '../SignInButton';
+import { Toaster } from 'react-hot-toast';
 
 export function Header() {
   return(

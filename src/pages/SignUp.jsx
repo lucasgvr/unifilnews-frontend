@@ -41,7 +41,7 @@ export function SignUp() {
                 })
     
                 setTimeout(() => {
-                    navigate('/')
+                    navigate('/login')
                 }, 2000)
             }).catch(error => {
                 console.log(error)
@@ -70,8 +70,8 @@ export function SignUp() {
                 </div>
                 <input type="text" placeholder="Email Address" onChange={event => setEmail(event.target.value)} />
                 <div className="inputLine">
-                    <input type="text" placeholder="Password"  onChange={event => setPassword(event.target.value)} />
-                    <input type="text" placeholder="Confirm Password"  onChange={event => setConfirmPassword(event.target.value)} />
+                    <input type="password" placeholder="Password"  onChange={event => setPassword(event.target.value)} />
+                    <input type="password" placeholder="Confirm Password"  onChange={event => setConfirmPassword(event.target.value)} />
                 </div>
 
                 <input type="text" placeholder="CPF" onChange={event => setCpf(event.target.value)} />

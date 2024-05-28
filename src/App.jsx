@@ -7,6 +7,7 @@ import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
 import { Posts } from './pages/Posts'
 import { UserPage } from './pages/UserPage'
+import { Loading } from './pages/Loading'
 
 import PrivateRoute from './PrivateRoute'
 import AuthRoute from './AuthRoute'
@@ -32,6 +33,8 @@ function App() {
                     </Route>
 
                     <Route path='/user/:id' element={<UserPage />} />
+
+                    <Route path='/loading' element={<Loading />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

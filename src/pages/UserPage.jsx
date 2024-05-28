@@ -48,6 +48,7 @@ export function UserPage() {
             } 
         }
 
+        toast.dismiss()
         getUser(id)
     }, [userPage])
 
@@ -73,29 +74,66 @@ export function UserPage() {
                     signOut()
                 }, 2000)
             } else {
-                const formData = new FormData()
+                if(newPassword === confirmNewPassword) {
+                    const formData = new FormData()
+                    
+                    formData.append('firstName', firstName === '' ? user.firstName : firstName)
+                    formData.append('lastName', lastName === '' ? user.lastName : lastName)
+                    formData.append('email', email === '' ? user.email : email)
+                    formData.append('password', newPassword === '' || confirmNewPassword === '' ? user.password : newPassword)
+                    formData.append('cpf', cpf === '' ? user.cpf : cpf)
+                    formData.append('phone', phone === '' ? user.phone : phone)
+                    formData.append('image', selectedFile == null ? user.image : selectedFile)
+            
+                    formData.append('id', user.id)
+            
+                    axios.post('http://localhost:8000/upload', formData)
+                    .then(response => {
+                        if(response.data.Status === 'Success') {
+                            toast.success('User updated')
+                            
+                            setTimeout(() => {
+                                navigate('/')
+                                navigate(0)
+                            }, 2000)
+                        } else {
+                            console.log('Error while uploading image')
+                        }
+                    })
+                    .catch(error => console.log(error))
+                } else {
+                    toast.error('Passwords does not match', {
+                        id: 2
+                    })
+                }
+            }
+        }).catch(error => {
+            console.log(error)
+        })
+    }
 
-                formData.append('firstName', firstName === '' ? user.firstName : firstName)
-                formData.append('lastName', lastName === '' ? user.lastName : lastName)
-                formData.append('email', email === '' ? user.email : email)
-                formData.append('cpf', cpf === '' ? user.cpf : cpf)
-                formData.append('phone', phone === '' ? user.phone : phone)
-        
-                formData.append('image', selectedFile == null ? user.image : selectedFile)
-        
-                formData.append('id', user.id)
-        
-                axios.post('http://localhost:8000/upload', formData)
+    const handleDeleteImg = async () => {
+        await axios.post('http://localhost:8000/token', { 
+            token: activeToken, 
+            id: activeId 
+        }).then(response => {
+            if(response.data == false) {
+                toast.error('Session Expired', {
+                    id: 1
+                })
+
+                setTimeout(() => {
+                    navigate('/')
+                    navigate(0)
+                    signOut()
+                }, 2000)
+            } else {
+                axios.post(`http://localhost:8000/user/${user.id}/delete/image`)
                 .then(response => {
                     if(response.data.Status === 'Success') {
-                        toast.success('User updated')
-                        
-                        setTimeout(() => {
-                            navigate('/')
-                            navigate(0)
-                        }, 2000)
+                        console.log('Image deleted')
                     } else {
-                        console.log('Error while uploading image')
+                        console.log('Error while deleting image')
                     }
                 })
                 .catch(error => console.log(error))
@@ -103,18 +141,6 @@ export function UserPage() {
         }).catch(error => {
             console.log(error)
         })
-    }
-
-    function handleDeleteImg() {
-        axios.post(`http://localhost:8000/user/${user.id}/delete/image`)
-        .then(response => {
-            if(response.data.Status === 'Success') {
-                console.log('Image deleted')
-            } else {
-                console.log('Error while deleting image')
-            }
-        })
-        .catch(error => console.log(error))
     }
 
     return (
@@ -137,8 +163,8 @@ export function UserPage() {
                         </div>
                         <input defaultValue={user.email} type="text" placeholder="Email Address" onChange={event => setEmail(event.target.value)} />
                         <div className='inputLine'>
-                            <input type="text" placeholder="New Password" onChange={event => setNewPassword(event.target.value)} />
-                            <input type="text" placeholder="Confirm New Password" onChange={event => setConfirmNewPassword(event.target.value)} />
+                            <input type="password" placeholder="New Password" onChange={event => setNewPassword(event.target.value)} />
+                            <input type="password" placeholder="Confirm New Password" onChange={event => setConfirmNewPassword(event.target.value)} />
                         </div>
                         <input defaultValue={user.cpf} type="text" placeholder="CPF" onChange={event => setCpf(event.target.value)} />
                         <input defaultValue={user.phone} type="text" placeholder="Telefone" onChange={event => setPhone(event.target.value)} />
