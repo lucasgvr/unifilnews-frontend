@@ -9,6 +9,8 @@ import '../styles/user.scss'
 import { useAuth } from "../hooks/useAuth"
 
 import defaultImg from '../assets/default.png'
+import toast, { Toaster } from 'react-hot-toast'
+
 
 import { FaTrash } from "react-icons/fa";
 
@@ -30,7 +32,10 @@ export function UserPage() {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const { user } = useAuth()
+    const { user, signOut } = useAuth()
+
+    const activeToken = localStorage.getItem("token")
+    const activeId = localStorage.getItem("userId")
 
     useEffect(() => {
         const getUser = async (id) => {
@@ -53,30 +58,51 @@ export function UserPage() {
     const handleUpload = async (event) => {
         event.preventDefault()
 
-        const formData = new FormData()
+        await axios.post('http://localhost:8000/token', { 
+            token: activeToken, 
+            id: activeId 
+        }).then(response => {
+            if(response.data == false) {
+                toast.error('Session Expired', {
+                    id: 1
+                })
 
-        formData.append('firstName', firstName === '' ? user.firstName : firstName)
-        formData.append('lastName', lastName === '' ? user.lastName : lastName)
-        formData.append('email', email === '' ? user.email : email)
-        formData.append('cpf', cpf === '' ? user.cpf : cpf)
-        formData.append('phone', phone === '' ? user.phone : phone)
-
-        formData.append('image', selectedFile == null ? user.image : selectedFile)
-
-        formData.append('id', user.id)
-
-        console.log(formData)
-
-        axios.post('http://localhost:8000/upload', formData)
-        .then(response => {
-            if(response.data.Status === 'Success') {
-                console.log('Image uploaded')
-                navigate('/')
+                setTimeout(() => {
+                    navigate('/')
+                    navigate(0)
+                    signOut()
+                }, 2000)
             } else {
-                console.log('Error while uploading image')
+                const formData = new FormData()
+
+                formData.append('firstName', firstName === '' ? user.firstName : firstName)
+                formData.append('lastName', lastName === '' ? user.lastName : lastName)
+                formData.append('email', email === '' ? user.email : email)
+                formData.append('cpf', cpf === '' ? user.cpf : cpf)
+                formData.append('phone', phone === '' ? user.phone : phone)
+        
+                formData.append('image', selectedFile == null ? user.image : selectedFile)
+        
+                formData.append('id', user.id)
+        
+                axios.post('http://localhost:8000/upload', formData)
+                .then(response => {
+                    if(response.data.Status === 'Success') {
+                        toast.success('User updated')
+                        
+                        setTimeout(() => {
+                            navigate('/')
+                            navigate(0)
+                        }, 2000)
+                    } else {
+                        console.log('Error while uploading image')
+                    }
+                })
+                .catch(error => console.log(error))
             }
+        }).catch(error => {
+            console.log(error)
         })
-        .catch(error => console.log(error))
     }
 
     function handleDeleteImg() {
@@ -96,6 +122,7 @@ export function UserPage() {
             {!userPage ? <Loader /> : 
             <>
                 <Header />
+                <Toaster />
 
                 {`/user/${user?.id}` === location.pathname ? 
                 <form className="userEditContainer" onSubmit={handleUpload}>

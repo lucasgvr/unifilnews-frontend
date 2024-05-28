@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { FaUserLock } from "react-icons/fa";
 
 import '../styles/signin.scss'
+import { FaArrowLeft } from "react-icons/fa";
 
 import axios from 'axios'
 
@@ -31,6 +32,8 @@ export function SignIn() {
     }
 
     return (
+        <div className='signInSuperContainer'>
+        <FaArrowLeft color='var(--orange-5)' className='backArrow' onClick={() => navigate('/')} />
         <form className="signInContainer" onSubmit={handleSignIn}>
             <div className='iconContainer'>
                 <FaUserLock color='#fff'/>
@@ -44,5 +47,6 @@ export function SignIn() {
             <Link to='/signup' className='signInLink'>Don't have an account? <span>Sign Up</span></Link>
             {error && <div>{error}</div>}
         </form>
+        </div>
     )
 }

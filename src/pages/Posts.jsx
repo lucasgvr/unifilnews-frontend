@@ -13,33 +13,43 @@ export function Posts() {
     const token = localStorage.getItem("token")
     const id = localStorage.getItem("userId")
 
-    const [isTokenExpired, setIsTokenExpired] = useState(false)
-
     const { signOut } = useAuth()
+
+    const [validToken, setValidToken] = useState(true)
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        const toastId = toast.loading('Loading')
-    
-        const response = axios.post('http://localhost:8000/token', { token, id })
-            .then(response => {
-                if(response.data == true) {
-                    setIsTokenExpired(true)
-                    toast.error('Session expired', {
-                        id: toastId
+        const validateToken = async () => {
+            await axios.post('http://localhost:8000/token', { 
+                token, 
+                id 
+            }).then(response => {
+                if(response.data == false) {
+                    console.log(response.data)
+                    setValidToken(false)
+                    toast.error('Session Expired', {
+                        id: 1
                     })
+
                     setTimeout(() => {
                         navigate('/')
+                        navigate(0)
+                        signOut()
                     }, 2000)
-                } 
+                } else {
+                    setValidToken(true)
+                }
             }).catch(error => {
                 console.log(error)
             })
-    }, [])
+        }
+
+        validateToken()
+    }, [validToken])
 
     return (
-        isTokenExpired ?  
+        !validToken ?  
         <div>
             <Toaster />
             <Loader />

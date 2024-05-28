@@ -1,3 +1,20 @@
+.signInSuperContainer {
+    .backArrow {
+        cursor: pointer;
+
+        height: 2rem;
+        width: 2rem;
+
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+
+        &:hover {
+            filter: brightness(0.9);
+        }
+    }
+}
+
 .signInContainer {
     display: flex;
     flex-direction: column;
