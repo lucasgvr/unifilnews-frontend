@@ -1,0 +1,68 @@
+.postsContainer {
+    display: flex;
+    flex-direction: column;
+
+    max-width: 50rem;
+
+    margin: 4rem auto 0;
+
+    
+
+    textarea {
+        resize: none;
+
+        width: 40vw;
+        height: 8rem;
+    }
+
+    .postContainerHeader {
+        display: flex;
+        justify-content: space-between;
+
+        align-items: center;
+
+        button {
+            color: var(--white);
+            background-color: var(--orange-5);
+
+            border: 0;
+            border-radius: 2rem;
+
+            padding: 1rem;
+
+            transition: 0.25s;
+
+            &:hover {
+                filter: brightness(0.9);
+            }
+        }
+    }
+
+    .post {
+        margin-top: 2em;
+
+        border-bottom: 1px solid var(--orange-5);
+
+        padding: 1rem;
+
+        .postHeader {
+            display: flex;
+            margin-bottom: 1rem;
+
+            gap: 1rem;
+        }
+
+        .postFooter {
+            margin-top: 1rem;
+
+            display: flex;
+
+            gap: 1rem;
+
+            div {
+                display: flex;
+                gap: 1rem;
+            }
+        }
+    }
+}

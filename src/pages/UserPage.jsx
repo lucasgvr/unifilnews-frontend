@@ -48,7 +48,6 @@ export function UserPage() {
             } 
         }
 
-        toast.dismiss()
         getUser(id)
     }, [userPage])
 
@@ -64,12 +63,13 @@ export function UserPage() {
             id: activeId 
         }).then(response => {
             if(response.data == false) {
+                toast.dismiss()
                 toast.error('Session Expired', {
                     id: 1
                 })
 
                 setTimeout(() => {
-                    navigate('/')
+                    navigate('/loading')
                     navigate(0)
                     signOut()
                 }, 2000)
@@ -90,6 +90,7 @@ export function UserPage() {
                     axios.post('http://localhost:8000/upload', formData)
                     .then(response => {
                         if(response.data.Status === 'Success') {
+                            toast.dismiss()
                             toast.success('User updated')
                             
                             setTimeout(() => {
