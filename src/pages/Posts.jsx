@@ -9,6 +9,10 @@ import axios from 'axios'
 
 import '../styles/posts.scss'
 
+import Modal from 'react-modal'
+import { IoMdClose } from "react-icons/io";
+
+
 
 
 export function Posts() {
@@ -20,6 +24,31 @@ export function Posts() {
     const [validToken, setValidToken] = useState(true)
 
     const navigate = useNavigate()
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const [postContent, setPostContent] = useState('')
+
+    function openModal() {
+        setIsModalOpen(true);
+    }
+    
+    function closeModal() {
+        setIsModalOpen(false);
+    }
+
+    Modal.setAppElement('#root')
+
+    function handleCreatePost() {
+        axios.post('http://localhost:8000/posts/new', {
+            id,
+            postContent
+        }).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
 
     useEffect(() => {
         const validateToken = async () => {
@@ -59,6 +88,19 @@ export function Posts() {
         :
         <div>
             <Header />
+            <Modal 
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                className="modalContainer"
+                style={{ overlay: {background: 'rgba(0, 0, 0, 0.5)'} }}
+            >
+                <div className="modalContent">
+                    <h1 className="title">New Post</h1>
+                    <IoMdClose className="closeButton" onClick={closeModal}>Close</IoMdClose>
+                    <textarea className="textInput" maxLength={1000} onChange={event => setPostContent(event.target.value)}></textarea>
+                    <button className="postButton" onClick={handleCreatePost}>Post</button>
+                </div>
+            </Modal>
             <div className="postsContainer">
                 <div style={{ display: 'none' }}>
                     <h1>Posts</h1>
@@ -66,8 +108,8 @@ export function Posts() {
                 </div>
 
                 <div className="postContainerHeader">
-                    <h1>Title</h1>
-                    <button>+ New Post  </button>
+                    <h1>Posts</h1>
+                    <button onClick={openModal}>+ New Post  </button>
                 </div>
 
                 <div className="post">
