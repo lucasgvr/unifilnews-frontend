@@ -6,7 +6,7 @@
 
     margin: 4rem auto 0;
 
-    .postContainerHeader {
+    .postsContainerHeader {
         display: flex;
         justify-content: space-between;
 
@@ -40,7 +40,28 @@
             display: flex;
             margin-bottom: 1rem;
 
+            align-items: center;
+
+            justify-content: space-between;
+
             gap: 1rem;
+
+            img {
+                width: 2rem;
+                height: 2rem;
+
+                border-radius: 50%;
+
+                border: 1px solid var(--orange-5);
+            }
+
+            .userInfo {
+                display: flex;
+
+                align-items: center;
+
+                gap: 1rem;
+            }
         }
 
         .postFooter {
@@ -50,9 +71,13 @@
 
             gap: 1rem;
 
-            div {
-                display: flex;
-                gap: 1rem;
+            svg {
+                cursor: pointer;
+                transition: 0.25s;
+
+                &:hover {
+                    filter: brightness(0.75);
+                }
             }
         }
     }

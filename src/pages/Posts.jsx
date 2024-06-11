@@ -1,7 +1,7 @@
 import { Loader } from "../components/Loader";
 import { Header } from "../components/Header";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast'
@@ -12,12 +12,19 @@ import '../styles/posts.scss'
 import Modal from 'react-modal'
 import { IoMdClose } from "react-icons/io";
 
+import defaultImg from '../assets/default.png'
+import { VscHeart } from "react-icons/vsc";
+
+import { VscComment } from "react-icons/vsc";
+
 
 
 
 export function Posts() {
     const token = localStorage.getItem("token")
     const id = localStorage.getItem("userId")
+
+    const [posts, setPosts] = useState([])
 
     const { signOut } = useAuth()
 
@@ -28,6 +35,25 @@ export function Posts() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const [postContent, setPostContent] = useState('')
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const postsResponse = await axios.get('http://localhost:8000/posts')
+                const postsWithUserInfo = await Promise.all(postsResponse.data.posts.map(async post => {
+                    const userResponse = await axios.get(`http://localhost:8000/user?id=${post.userId}`)
+                    const user = userResponse.data.user;
+                    return { ...post, user }
+                }))
+
+                setPosts(postsWithUserInfo)
+            } catch (error) {
+                console.error('Failed to fetch posts: ', error);
+            }
+        }
+
+        fetchPosts()
+    }, [posts])
 
     function openModal() {
         setIsModalOpen(true);
@@ -42,12 +68,34 @@ export function Posts() {
     function handleCreatePost() {
         axios.post('http://localhost:8000/posts/new', {
             id,
-            postContent
+            postContent,
+            createdAt: new Date()
         }).then(response => {
             console.log(response)
         }).catch(error => {
             console.log(error)
         })
+
+        closeModal()
+    }
+
+    function getTimeDifference(postDate) {
+        const currentDate = new Date();
+        const difference = currentDate.getTime() - new Date(postDate).getTime();
+        const seconds = Math.floor(difference / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+    
+        if (days > 0) {
+            return `${days} days ago`;
+        } else if (hours > 0) {
+            return `${hours} hours ago`;
+        } else if (minutes > 0) {
+            return `${minutes} minutes ago`;
+        } else {
+            return `${seconds} seconds ago`;
+        }
     }
 
     useEffect(() => {
@@ -107,59 +155,31 @@ export function Posts() {
                     <textarea autoFocus maxLength={1000} placeholder='teste'/>
                 </div>
 
-                <div className="postContainerHeader">
+                <div className="postsContainerHeader">
                     <h1>Posts</h1>
                     <button onClick={openModal}>+ New Post  </button>
                 </div>
 
-                <div className="post">
-                    <div className="postHeader">
-                        <p>imagem</p>
-                        <p>Lucas</p>
-                        <p>16h</p>
+                {posts
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .map(post => (
+                    <div className="post" key={post.id}>
+                        <div className="postHeader">
+                            <div className="userInfo">
+                                <img src={post.user.image ? `http://localhost:8000/images/${post.user.image}` : defaultImg} alt="" />
+                                <p>{post.user.firstName}</p>
+                            </div>
+
+                            <p>{getTimeDifference(post.createdAt)}</p>
+                        </div>
+                        <p>{post.postContent}</p>
+                        <div className="postFooter">
+                            <VscHeart color="var(--orange-5)" />
+                            <VscComment color="var(--orange-5)"  />
+                        </div>
                     </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit eos omnis dolore dolor possimus quo repudiandae ducimus ab, quae deleniti autem quidem est, sapiente beatae repellendus cupiditate doloremque delectus!</p>
-                    <div className="postFooter">
-                        <p>like</p>
-                        <p>comment</p>
-                    </div>
-                </div>
-                <div className="post">
-                    <div className="postHeader">
-                        <p>imagem</p>
-                        <p>Lucas</p>
-                        <p>16h</p>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit eos omnis dolore dolor possimus quo repudiandae ducimus ab, quae deleniti autem quidem est, sapiente beatae repellendus cupiditate doloremque delectus!</p>
-                    <div className="postFooter">
-                        <p>like</p>
-                        <p>comment</p>
-                    </div>
-                </div>
-                <div className="post">
-                    <div className="postHeader">
-                        <p>imagem</p>
-                        <p>Lucas</p>
-                        <p>16h</p>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit eos omnis dolore dolor possimus quo repudiandae ducimus ab, quae deleniti autem quidem est, sapiente beatae repellendus cupiditate doloremque delectus!</p>
-                    <div className="postFooter">
-                        <p>like</p>
-                        <p>comment</p>
-                    </div>
-                </div>
-                <div className="post">
-                    <div className="postHeader">
-                        <p>imagem</p>
-                        <p>Lucas</p>
-                        <p>16h</p>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit eos omnis dolore dolor possimus quo repudiandae ducimus ab, quae deleniti autem quidem est, sapiente beatae repellendus cupiditate doloremque delectus!</p>
-                    <div className="postFooter">
-                        <p>like</p>
-                        <p>comment</p>
-                    </div>
-                </div>
+                ))}
+                
             </div>
         </div>
     )
