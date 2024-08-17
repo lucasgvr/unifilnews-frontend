@@ -167,7 +167,7 @@ export function Posts() {
                         <div className="postHeader">
                             <div className="userInfo">
                                 <img src={post.user.image ? `http://localhost:8000/images/${post.user.image}` : defaultImg} alt="" />
-                                <p>{post.user.firstName}</p>
+                                <p>{post.user.firstName} {post.user.lastName}</p>
                             </div>
 
                             <p>{getTimeDifference(post.createdAt)}</p>
