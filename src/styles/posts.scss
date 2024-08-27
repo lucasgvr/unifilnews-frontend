@@ -71,12 +71,25 @@
 
             gap: 1rem;
 
+            align-items: center;
+
             svg {
                 cursor: pointer;
                 transition: 0.25s;
 
                 &:hover {
                     filter: brightness(0.75);
+                }
+            }
+
+            .likeContainer {
+                display: flex;
+                align-items: center;
+
+                span {
+                    margin-left: 5px;
+                    font-size: .75rem;
+                    color: red
                 }
             }
         }

@@ -16,9 +16,9 @@ import defaultImg from '../assets/default.png'
 import { VscHeart } from "react-icons/vsc";
 
 import { VscComment } from "react-icons/vsc";
+import { FaHeart } from "react-icons/fa";
 
-
-
+import PostLikes from "../components/PostsLikes";
 
 export function Posts() {
     const token = localStorage.getItem("token")
@@ -43,7 +43,11 @@ export function Posts() {
                 const postsWithUserInfo = await Promise.all(postsResponse.data.posts.map(async post => {
                     const userResponse = await axios.get(`http://localhost:8000/user?id=${post.userId}`)
                     const user = userResponse.data.user;
-                    return { ...post, user }
+
+                    const isLikedResponse = await axios.post(`http://localhost:8000/posts/${post.id}/liked`, { userId: id });
+                    const isLiked = isLikedResponse.data.isLiked;
+
+                    return { ...post, user, isLiked }
                 }))
 
                 setPosts(postsWithUserInfo)
@@ -98,6 +102,18 @@ export function Posts() {
         }
     }
 
+    const handleLike = async (postId) => {
+        try {
+            const response = await axios.post(`http://localhost:8000/posts/${postId}/like/new`, {
+                userId: id,
+            });
+
+            console.log(response.data);
+        } catch (error) {
+            console.error('Failed to like post: ', error);
+        }
+    };
+    
     useEffect(() => {
         const validateToken = async () => {
             await axios.post('http://localhost:8000/token', { 
@@ -174,8 +190,15 @@ export function Posts() {
                         </div>
                         <p>{post.postContent}</p>
                         <div className="postFooter">
-                            <VscHeart color="var(--orange-5)" />
-                            <VscComment color="var(--orange-5)"  />
+                            <div className="likeContainer" onClick={() => handleLike(post.id)}>
+                                {post.isLiked ? (
+                                    <FaHeart color="red" />
+                                ) : (
+                                    <VscHeart color="red" />
+                                )}
+                                <PostLikes postId={post.id} />
+                            </div>
+                            <VscComment color="var(--orange-5)" />
                         </div>
                     </div>
                 ))}
