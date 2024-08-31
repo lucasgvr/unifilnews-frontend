@@ -11,6 +11,7 @@ import { Loading } from './pages/Loading'
 
 import PrivateRoute from './PrivateRoute'
 import AuthRoute from './AuthRoute'
+import { PostPage } from './pages/PostPage'
 
 
 function App() {
@@ -30,6 +31,10 @@ function App() {
 
                     <Route path='/posts' element={<PrivateRoute />} >
                         <Route path='/posts' element={<Posts />} />
+                    </Route>
+
+                    <Route path='/post/:id' element={<PrivateRoute />} >
+                        <Route path='/post/:id' element={<PostPage />} />
                     </Route>
 
                     <Route path='/user/:id' element={<UserPage />} />

@@ -17,6 +17,8 @@ import { VscHeart } from "react-icons/vsc";
 
 import { VscComment } from "react-icons/vsc";
 import { FaHeart } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { BsPencilSquare } from "react-icons/bs";
 
 import PostLikes from "../components/PostsLikes";
 
@@ -33,8 +35,11 @@ export function Posts() {
     const navigate = useNavigate()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
     const [postContent, setPostContent] = useState('')
+    const [editPostContent, setEditPostContent] = useState('')
+    const [editPostId, setEditPostId] = useState('')
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -65,6 +70,18 @@ export function Posts() {
     
     function closeModal() {
         setIsModalOpen(false);
+    }
+
+    async function openEditModal(postId) {
+        const postReponse = await axios.get(`http://localhost:8000/posts/${postId}`)
+        setEditPostContent(postReponse.data.post[0].postContent)
+        setEditPostId(postId)
+
+        setIsEditModalOpen(true);
+    }
+    
+    function closeEditModal() {
+        setIsEditModalOpen(false);
     }
 
     Modal.setAppElement('#root')
@@ -113,6 +130,39 @@ export function Posts() {
             console.error('Failed to like post: ', error);
         }
     };
+
+    const handleDeletePost = async (postId) => {
+        try {
+            const response = await axios.post(`http://localhost:8000/posts/${postId}/delete`, {
+                userId: id,
+            });
+
+            console.log(response.data);
+        } catch (error) {
+            console.error('Failed to delete post: ', error);
+        }
+    };
+
+    const handleEditPost = async (postId) => {
+        try {
+            const response = await axios.post(`http://localhost:8000/posts/${postId}/update`, {
+                postContent: editPostContent,
+                createdAt: new Date()
+            });
+
+            console.log(response.data);
+        } catch (error) {
+            console.error('Failed to delete post: ', error);
+        } finally {
+            setEditPostContent('')
+            setIsEditModalOpen(false)
+            setEditPostId('')
+        }
+    }
+
+    const openPostPage = (postId) => {
+        navigate(`/post/${postId}`)
+    }
     
     useEffect(() => {
         const validateToken = async () => {
@@ -152,6 +202,7 @@ export function Posts() {
         :
         <div>
             <Header />
+
             <Modal 
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
@@ -165,6 +216,21 @@ export function Posts() {
                     <button className="postButton" onClick={handleCreatePost}>Post</button>
                 </div>
             </Modal>
+
+            <Modal 
+                isOpen={isEditModalOpen}
+                onRequestClose={closeEditModal}
+                className="modalContainer"
+                style={{ overlay: {background: 'rgba(0, 0, 0, 0.5)'} }}
+            >
+                <div className="modalContent">
+                    <h1 className="title">Edit Post</h1>
+                    <IoMdClose className="closeButton" onClick={closeEditModal}>Close</IoMdClose>
+                    <textarea className="textInput" defaultValue={editPostContent} maxLength={1000} onChange={event => setEditPostContent(event.target.value)}></textarea>
+                    <button className="postButton" onClick={() => handleEditPost(editPostId)}>Edit</button>
+                </div>
+            </Modal>
+
             <div className="postsContainer">
                 <div style={{ display: 'none' }}>
                     <h1>Posts</h1>
@@ -188,17 +254,27 @@ export function Posts() {
 
                             <p>{getTimeDifference(post.createdAt)}</p>
                         </div>
-                        <p>{post.postContent}</p>
+                        <p onClick={() => openPostPage(post.id)}>{post.postContent}</p>
                         <div className="postFooter">
-                            <div className="likeContainer" onClick={() => handleLike(post.id)}>
-                                {post.isLiked ? (
-                                    <FaHeart color="red" />
-                                ) : (
-                                    <VscHeart color="red" />
-                                )}
-                                <PostLikes postId={post.id} />
+                            <div className="footerLeft">
+                                <div className="likeContainer" onClick={() => handleLike(post.id)}>
+                                    {post.isLiked ? (
+                                        <FaHeart color="red" />
+                                    ) : (
+                                        <VscHeart color="red" />
+                                    )}
+                                    <PostLikes postId={post.id} />
+                                </div>
+                                <VscComment color="var(--orange-5)" onClick={() => openPostPage(post.id)}/>
                             </div>
-                            <VscComment color="var(--orange-5)" />
+                            <div className="footerRight">
+                                {post.userId == id &&
+                                    <>
+                                        <MdDelete color="var(--orange-5)" onClick={() => handleDeletePost(post.id)}/>
+                                        <BsPencilSquare color="var(--orange-5)" onClick={() => openEditModal(post.id)}/>
+                                    </>
+                                }
+                            </div>
                         </div>
                     </div>
                 ))}
