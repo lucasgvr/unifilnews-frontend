@@ -316,7 +316,7 @@ export function PostPage() {
                                 </div>
                                 <div className="commentContent">
                                     <p>{comment.commentContent}</p>
-                                    {post.userId == userId && 
+                                    {comment.userId == userId && 
                                         <div>
                                             <MdDelete size={16} color="var(--orange-5)" onClick={() => handleDeleteComment(comment.id)} />
                                             <BsPencilSquare size={16} color="var(--orange-5)" onClick={() => openEditCommentModal(comment.id)} />
