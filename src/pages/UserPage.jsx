@@ -86,9 +86,15 @@ export function UserPage() {
                     formData.append('image', selectedFile == null ? user.image : selectedFile)
             
                     formData.append('id', user.id)
+
+                    formData.append('newPassword', newPassword === '' ? false : true)
+
+                    console.log(formData)
             
                     axios.post('http://localhost:8000/upload', formData)
                     .then(response => {
+                        console.log(user.password)
+                        console.log(newPassword)
                         if(response.data.Status === 'Success') {
                             toast.dismiss()
                             toast.success('User updated')
